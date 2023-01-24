@@ -5,21 +5,36 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import ru.netology.nmedia.dto.Attachment
+import ru.netology.nmedia.dto.Author
 import ru.netology.nmedia.dto.Comment
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.enumeration.AttachmentType
+import ru.netology.nmedia.service.AuthorService
 import ru.netology.nmedia.service.CommentService
 import ru.netology.nmedia.service.PostService
 
 @SpringBootApplication
 class NMediaApplication {
     @Bean
-    fun runner(postService: PostService, commentService: CommentService) = CommandLineRunner {
+    fun runner(
+        authorService: AuthorService,
+        postService: PostService,
+        commentService: CommentService,
+    ) = CommandLineRunner {
+        val netology = authorService.save(
+            Author(id = 0, name = "Netology", avatar = "netology.jpg")
+        )
+        val sber = authorService.save(
+            Author(id = 0, name = "Сбер", avatar = "sber.jpg")
+        )
+        val tcs = authorService.save(
+            Author(id = 0, name = "Тинькофф", avatar = "tcs.jpg")
+        )
+
         val firstPost = postService.save(
             Post(
                 id = 0,
-                author = "Netology",
-                authorAvatar = "netology.jpg",
+                authorId = netology.id,
                 content = "Привет, это новая Нетология!",
                 published = 0,
                 likedByMe = false,
@@ -29,8 +44,7 @@ class NMediaApplication {
         val secondPost = postService.save(
             Post(
                 id = 0,
-                author = "Сбер",
-                authorAvatar = "sber.jpg",
+                authorId = sber.id,
                 content = "Привет, это новый Сбер!",
                 published = 0,
                 likedByMe = false,
@@ -40,8 +54,7 @@ class NMediaApplication {
         val thirdPost = postService.save(
             Post(
                 id = 0,
-                author = "Тинькофф",
-                authorAvatar = "tcs.jpg",
+                authorId = tcs.id,
                 content = "Нам и так норм!",
                 published = 0,
                 likedByMe = false,
@@ -51,8 +64,7 @@ class NMediaApplication {
         val fourthPost = postService.save(
             Post(
                 id = 0,
-                author = "Netology",
-                authorAvatar = "netology.jpg",
+                authorId = netology.id,
                 content = "Подкасты любят за возможность проводить время с пользой и слушать познавательные лекции или беседы во время прогулок или домашних дел. Интересно, что запустить свой подкаст и обсуждать интересные темы может любой.",
                 published = 0,
                 likedByMe = false,
@@ -67,8 +79,7 @@ class NMediaApplication {
         val fifthPost = postService.save(
             Post(
                 id = 0,
-                author = "Сбер",
-                authorAvatar = "sber.jpg",
+                authorId = sber.id,
                 content = "Появился новый способ мошенничества \uD83D\uDE21 Злоумышленники звонят от имени банка и говорят, что для клиента выпущена новая, особо защищённая карта, которую можно добавить в приложение Кошелёк на смартфоне. Под диктовку мошенника человек привязывает к Кошельку его карту, причём указывает своё имя. Если карту пополнить, деньги уйдут мошеннику.\n\nДело в том, что в Кошелёк можно добавить любую, даже чужую карту, а имя поставить какое угодно. Но чужая банковская карта не будет отображаться, например, в СберБанк Онлайн.",
                 published = 0,
                 likedByMe = false,
@@ -85,8 +96,7 @@ class NMediaApplication {
                 Comment(
                     id = 0,
                     postId = firstPost.id,
-                    author = "Netology",
-                    authorAvatar = "netology.jpg",
+                    authorId = netology.id,
                     content = "Отлично!",
                     published = 0,
                     likedByMe = false,
@@ -97,8 +107,7 @@ class NMediaApplication {
                 Comment(
                     id = 0,
                     postId = firstPost.id,
-                    author = "Сбер",
-                    authorAvatar = "sber.jpg",
+                    authorId = sber.id,
                     content = "Мы тоже обновились!",
                     published = 0,
                     likedByMe = false,
@@ -109,8 +118,7 @@ class NMediaApplication {
                 Comment(
                     id = 0,
                     postId = secondPost.id,
-                    author = "Netology",
-                    authorAvatar = "netology.jpg",
+                    authorId = netology.id,
                     content = "Новый логотип прекрасен!",
                     published = 0,
                     likedByMe = false,

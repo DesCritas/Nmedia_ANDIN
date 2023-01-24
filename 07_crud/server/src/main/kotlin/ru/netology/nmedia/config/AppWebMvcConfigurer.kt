@@ -6,6 +6,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import ru.netology.nmedia.exception.InternalServerError
 
 @Configuration
 class AppWebMvcConfigurer : WebMvcConfigurer {
@@ -18,6 +19,15 @@ class AppWebMvcConfigurer : WebMvcConfigurer {
                     request.requestURI.startsWith("/images")
                 ) {
                     Thread.sleep(5_000)
+                }
+                return true
+            }
+        })
+
+        registry.addInterceptor(object: HandlerInterceptor {
+            override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+                if (Math.random() > 0.5) {
+                    throw InternalServerError()
                 }
                 return true
             }

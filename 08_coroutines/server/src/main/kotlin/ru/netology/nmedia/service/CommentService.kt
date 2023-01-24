@@ -33,7 +33,8 @@ class CommentService(private val repository: CommentRepository) {
             )
         )
         .let {
-            if (it.id == 0L) repository.save(it) else it.content = dto.content
+            it.content = dto.content
+            if (it.id == 0L) repository.save(it)
             it
         }.toDto()
 
